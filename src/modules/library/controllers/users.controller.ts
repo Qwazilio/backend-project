@@ -14,16 +14,12 @@ export class UsersController {
   }
 
   @Get(':id')
-  async thisUser(@Param('id') id: string) {  // Получение конкретного пользователя по индификатору
-      
-      return this.libraryService.findUserById(id) 
-  }
-
-  @Get('books/:id')
-  async UserBooks(@Param('id') idUser) {  // Получение списка книг конкретного пользователся
+  async thisUser(@Param('id') id) {  // Получение конкретного пользователя по индификатору 
+      const user = await this.libraryService.findUserById(id) 
       const book = new Books()
-      book.owner = idUser
-      return this.libraryService.findUserBook(book)
+      book.owner = id
+      const books = await this.libraryService.findUserBook(book)
+      return Object.assign({},user,{books})
   }
 
   @Post()
