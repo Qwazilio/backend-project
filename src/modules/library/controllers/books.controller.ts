@@ -33,11 +33,16 @@ export class BooksController {
   }
   
   @Put("returnBook/:id")
-  async returnBook(@Param('id') id: string) : Promise<Books>{  //Возвращение книги
+  async returnBook(@Param('id') id: string) {  //Возвращение книги
     const book = await this.libraryService.findOneBook(id)
-    book.availability = true
-    this.libraryService._rentBook(book.owner.toString())
-    book.owner = null
-    return this.libraryService.rentBook(book)
+    if(book.availability == false){
+      book.availability = true
+      this.libraryService._returnBook(book.owner.toString())
+      book.owner = null
+      return this.libraryService.returnBook(book)
+    }else{
+      return "You don't have a book"
+    }
+
   }
 }

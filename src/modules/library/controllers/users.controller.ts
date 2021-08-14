@@ -2,8 +2,6 @@ import { Controller, Get, Post, Param, Body, Delete, Put } from '@nestjs/common'
 import { LibraryService } from '../services/library.service';
 import { Users } from '../entities/users.entity';
 import { CreateUser, UpdateUser} from './users.dto';
-import { request } from 'express';
-import { userInfo } from 'os';
 import { Books } from '../entities/books.entity';
 
 @Controller('rest/users')
@@ -11,7 +9,7 @@ export class UsersController {
     constructor(private readonly libraryService: LibraryService) {}
     
   @Get()
-  allUsers() {  // Cписок пользователей
+  allUsers() : Promise<Users[]> {  // Cписок пользователей
     return this.libraryService.findAllUser()
   }
 
@@ -30,7 +28,7 @@ export class UsersController {
 
   @Post()
   addUser(@Body() createUser: CreateUser){  // Добавление пользователя
-    if(createUser.firstName == null || createUser.lastName == null){
+    if(createUser.firstName == "" || createUser.lastName == ""){
       return "wrong data"
     }else{
       const users = new Users();
@@ -57,8 +55,8 @@ export class UsersController {
     return this.libraryService.updateUser(user)
   }
 
-  @Put('subscription/:id')
-  async getSubscription(@Param('id') id: string, @Body() {subscription}: UpdateUser): Promise<Users>{  //Устновка наличия купленного абонимента
+  @Put('/subscription/:id')
+  async subscriptionUser(@Param('id') id: string, @Body() {subscription}: UpdateUser): Promise<Users>{  //Устновка наличия купленного абонимента
     const user = await this.libraryService.findUserById(id)
     user.subscription = subscription
     return this.libraryService.updateUser(user)

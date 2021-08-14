@@ -13,7 +13,7 @@ export class LibraryService {
     private usersRepository: Repository<Users>,
   ) {}
 
-  findAllUser(): Promise<Users[]> {
+  findAllUser() {
     return this.usersRepository.find();
   }
 
