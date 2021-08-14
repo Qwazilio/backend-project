@@ -14,7 +14,7 @@ export class UsersController {
   }
 
   @Get(':id')
-  async thisUser(@Param('id') id) {  // Получение конкретного пользователя по индификатору 
+  async thisUser(@Param('id') id) {  // Получение конкретного пользователя по индификатору (+ его список книг)
       const user = await this.libraryService.findUserById(id) 
       const book = new Books()
       book.owner = id
